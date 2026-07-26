@@ -1,0 +1,24 @@
+{
+  "name": "@tryitwithann/equipment-for-typescript",
+  "version": "0.1.0-dev",
+  "description": "Equipment for targeting TypeScript as a language environment for artifacts produced by Ann.",
+  "homepage": "https://github.com/tryitwithann.com/equipment-for-typescript#readme",
+  "bugs": {
+    "url": "https://github.com/tryitwithann.com/equipment-for-typescript/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tryitwithann.com/equipment-for-typescript.git"
+  },
+  "license": "CC-BY-SA-4.0",
+  "author": "Try it with Ann",
+  "scripts": {
+    "test": "some people are used to `npm run test` so let's make life easy for them.",
+    "test": "bin/test.sh"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.10",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

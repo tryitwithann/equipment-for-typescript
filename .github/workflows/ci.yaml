@@ -1,0 +1,29 @@
+name: "Continuous Integration"
+
+on:
+  push: ~
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - uses: "actions/checkout@v7"
+
+      - name: "Setup NodeJS"
+        uses: "actions/setup-node@v7"
+        with:
+          node-version: '24'
+
+      - name: 'Install'
+        run: 'bin/install.sh'
+
+      - name: 'Test'
+        run: 'bin/test.sh'
+
+      - name: 'Upload coverage report'
+        if: always()
+        uses: 'actions/upload-artifact@v7'
+        with:
+          name: 'coverage-report'
+          path: 'coverage'
