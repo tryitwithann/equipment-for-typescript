@@ -86,7 +86,11 @@ class WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     thenNothingShouldHaveHappened(): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
         const noOutcomesExpected: AnyEvent[] = [] as const;
 
-        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, noOutcomesExpected)
+        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(
+            this.preConditions,
+            this.trigger,
+            noOutcomesExpected
+        );
     }
 }
 
