@@ -325,8 +325,7 @@ describe("Executable specification of command handler", () => {
 
         const preConditions = [ticketsWereOffered];
         const trigger = reserveTickets;
-        const outcome = ticketsWereReserved;
-        const outcomes = [outcome];
+        const outcomes = [ticketsWereReserved];
 
         return (new ExecutableSpecificationOfCommandHandler<AnyTicketingEvent, AnyTicketingCommand>())
             .given(ticketsWereOffered)
