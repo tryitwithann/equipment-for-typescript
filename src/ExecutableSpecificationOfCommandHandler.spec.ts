@@ -272,13 +272,13 @@ describe("Executable specification of command handler", () => {
             .given(ticketsWereOffered)
             .when(offerTickets)
             .thenNothingShouldHaveHappened()
-            .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
+            .execute(async (preConditions: AnyTicketingEvent[], trigger: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
                 const expectedPreConditions = [ticketsWereOffered];
                 const expectedTrigger = offerTickets;
                 const expectedOutcomes = [] as const;
 
-                expect(givens).toStrictEqual(expectedPreConditions);
-                expect(when).toStrictEqual(expectedTrigger);
+                expect(preConditions).toStrictEqual(expectedPreConditions);
+                expect(trigger).toStrictEqual(expectedTrigger);
                 expect(thens).toStrictEqual(expectedOutcomes);
             });
     });
