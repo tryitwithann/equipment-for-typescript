@@ -159,7 +159,7 @@ class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
 
 describe("Executable specification of command handler", () => {
     test("Simplest specification: When -> Then", async () => {
-        const trigger: OfferTickets = {
+        const offerTickets: OfferTickets = {
             _named: "Offer tickets!",
             ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
             ticketSellerId: "ticket-seller:9b079b1c-81b2-4acd-a1b6-75a10c08c595",
@@ -207,11 +207,11 @@ describe("Executable specification of command handler", () => {
         };
 
         return (new ExecutableSpecificationOfCommandHandler<AnyTicketingEvent, AnyTicketingCommand>())
-            .when(trigger)
+            .when(offerTickets)
             .then(outcome)
             .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
                 const expectedGivens = [] as const;
-                const expectedWhen = trigger;
+                const expectedWhen = offerTickets;
                 const expectedThens = [outcome];
                 
                 expect(givens).toStrictEqual(expectedGivens);
