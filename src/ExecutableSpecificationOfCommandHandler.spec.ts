@@ -51,32 +51,54 @@ type ExecuteScenario<AnyEvent, AnyCommand> = (givens: AnyEvent[], when: AnyComma
 
 class ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     constructor(
+        private preConditions: AnyEvent[],
         private trigger: AnyCommand,
-        private outcome: AnyEvent
+        private outcome?: AnyEvent
     ) {
         // intentionally empty
     }
 
     async execute(executable: ExecuteScenario<AnyEvent, AnyCommand>) {
-        return executable([] as const, this.trigger, [this.outcome]);
+        return executable(this.preConditions, this.trigger, this.outcome ? [this.outcome] : []);
     }
 }
 
 class WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     constructor(
+        private preConditions: AnyEvent[],
         private trigger: AnyCommand
     ) {
         // intentionally empty
     }
 
     then(outcome: AnyEvent): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.trigger, outcome)
+        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, outcome)
+    }
+
+    thenNothingShouldHaveHappened(): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, undefined)
+    }
+}
+
+class GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+    constructor(
+        private preConditions: AnyEvent[]
+    ) {
+        // intentionally empty
+    }
+
+    when(trigger: AnyCommand): WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+        return new WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, trigger)
     }
 }
 
 class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+    given(preCondition: AnyEvent): GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+        return new GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>([preCondition])
+    }
+
     when(trigger: AnyCommand): WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-        return new WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(trigger)
+        return new WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>([] as const, trigger)
     }
 }
 
