@@ -23,6 +23,13 @@ type OfferTickets = {
     priceInCents: [number, "EUR" | "GBP"]
 }
 
+type ReserveTickets = {
+    _named: "Reserve tickets!",
+    ticketSaleId: `ticket-sale:${string}`,
+    basket: `basket:${string}`,
+    desiredNumberOfTickets: number
+}
+
 type TicketsWereOffered = {
     _named: "Tickets were offered",
     ticketSaleId: `ticket-sale:${string}`,
@@ -45,6 +52,14 @@ type TicketsWereOffered = {
     availableTickets: number,
     priceInCents: [number, "EUR" | "GBP"],
     offeredAt: [string, string]
+}
+
+type TicketsWereReserved = {
+    _named: "Tickets were reserved",
+    ticketSaleId: `ticket-sale:${string}`,
+    basket: `basket:${string}`,
+    desiredNumberOfTickets: number,
+    reservedNumberOfTickets: number
 }
 
 type ExecuteScenario<AnyEvent, AnyCommand> = (givens: AnyEvent[], when: AnyCommand, thens: AnyEvent[]) => Promise<void>;
@@ -250,6 +265,68 @@ describe("Executable specification of command handler", () => {
                 const expectedGivens = [preCondition];
                 const expectedWhen = trigger;
                 const expectedThens = [] as const;
+
+                expect(givens).toStrictEqual(expectedGivens);
+                expect(when).toStrictEqual(expectedWhen);
+                expect(thens).toStrictEqual(expectedThens);
+            });
+    });
+
+    test("Common specification: Given(1) -> When -> Then(1)", async () => {
+        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved;
+        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
+
+        const ticketsWereOffered: TicketsWereOffered = {
+            _named: "Tickets were offered",
+            ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
+            ticketSellerId: "ticket-seller:9b079b1c-81b2-4acd-a1b6-75a10c08c595",
+            eventDetails: {
+                show: "Comedytrain",
+                scheduled: ["2026-06-20 20:30", "2026-06-20 22:00", "Europe/Amsterdam"],
+                location: {
+                    venue: "Comedyclub Comedytrain",
+                    address: {
+                        street: "Pazzanistraat",
+                        streetNumber: "1",
+                        streetNumberAddition: "",
+                        postalCode: "1014 DB",
+                        city: "Amsterdam",
+                        country: "NL"
+                    }
+                }
+            },
+            availableTickets: 150,
+            priceInCents: [2250, "EUR"],
+            offeredAt: ["2026-05-04 09:07:15", "Europe/Amsterdam"]
+        };
+
+        const reserveTickets: ReserveTickets = {
+            _named: "Reserve tickets!",
+            ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
+            basket: "basket:77fee20d-2bbf-461d-93a8-0cc3e74a1018",
+            desiredNumberOfTickets: 2,
+        };
+
+        const ticketsWereReserved: TicketsWereReserved = {
+            _named: "Tickets were reserved",
+            ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
+            basket: "basket:77fee20d-2bbf-461d-93a8-0cc3e74a1018",
+            desiredNumberOfTickets: 2,
+            reservedNumberOfTickets: 2,
+        };
+
+        const preCondition = ticketsWereOffered;
+        const trigger = reserveTickets;
+        const outcome = ticketsWereReserved;
+
+        return (new ExecutableSpecificationOfCommandHandler<AnyTicketingEvent, AnyTicketingCommand>())
+            .given(preCondition)
+            .when(trigger)
+            .then(outcome)
+            .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
+                const expectedGivens = [preCondition];
+                const expectedWhen = trigger;
+                const expectedThens = [outcome];
 
                 expect(givens).toStrictEqual(expectedGivens);
                 expect(when).toStrictEqual(expectedWhen);
