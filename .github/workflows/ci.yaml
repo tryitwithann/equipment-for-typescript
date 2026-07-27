@@ -10,14 +10,16 @@ jobs:
     steps:
       - uses: "actions/checkout@v7"
 
-      - name: "Setup NodeJS and Compile"
+      - name: "Setup NodeJS"
         uses: "actions/setup-node@v7"
         with:
           node-version: '24'
-        run: 'tsc --noEmit'
 
       - name: 'Install'
         run: 'bin/install.sh'
+
+      - name: 'Compile'
+        run: 'tsc --noEmit'
 
       - name: 'Test'
         run: 'bin/test.sh'
