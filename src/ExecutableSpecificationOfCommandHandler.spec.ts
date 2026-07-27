@@ -53,13 +53,13 @@ class ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     constructor(
         private preConditions: AnyEvent[],
         private trigger: AnyCommand,
-        private outcome?: AnyEvent
+        private outcomes: AnyEvent[]
     ) {
         // intentionally empty
     }
 
     async execute(executable: ExecuteScenario<AnyEvent, AnyCommand>) {
-        const outcomes = this.outcome ? [this.outcome] : [];
+        const outcomes = this.outcomes;
 
         return executable(this.preConditions, this.trigger, outcomes);
     }
@@ -74,11 +74,11 @@ class WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     }
 
     then(outcome: AnyEvent): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, outcome)
+        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, [outcome])
     }
 
     thenNothingShouldHaveHappened(): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, undefined)
+        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, [])
     }
 }
 
