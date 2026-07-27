@@ -68,6 +68,9 @@ type LastTicketsWereReserved = {
     totalNumberOfReservedTickets: number,
 }
 
+type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
+type AnyTicketingCommand = | OfferTickets | ReserveTickets;
+
 type ExecuteScenario<AnyEvent, AnyCommand> = (givens: AnyEvent[], when: AnyCommand, thens: AnyEvent[]) => Promise<void>;
 
 class ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
@@ -156,9 +159,6 @@ class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
 
 describe("Executable specification of command handler", () => {
     test("Simplest specification: When -> Then", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
-        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
-
         const trigger: OfferTickets = {
             _named: "Offer tickets!",
             ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
@@ -221,9 +221,6 @@ describe("Executable specification of command handler", () => {
     })
 
     test("Common specification: Given(1) -> When -> Then(0)", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
-        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
-
         const preCondition: TicketsWereOffered = {
             _named: "Tickets were offered",
             ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
@@ -287,9 +284,6 @@ describe("Executable specification of command handler", () => {
     });
 
     test("Common specification: Given(1) -> When -> Then(1)", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
-        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
-
         const ticketsWereOffered: TicketsWereOffered = {
             _named: "Tickets were offered",
             ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
@@ -349,9 +343,6 @@ describe("Executable specification of command handler", () => {
     });
 
     test("Common specification: Given(1+N) -> When -> Then(1)", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
-        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
-
         const ticketsWereOffered: TicketsWereOffered = {
             _named: "Tickets were offered",
             ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
@@ -419,9 +410,6 @@ describe("Executable specification of command handler", () => {
     });
 
     test("Common specification: Given(1+N) -> When -> Then(1+N)", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
-        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
-
         const ticketsWereOffered: TicketsWereOffered = {
             _named: "Tickets were offered",
             ticketSaleId: "ticket-sale:0e382d88-6112-4fd0-9c21-7a5a432c7e35",
