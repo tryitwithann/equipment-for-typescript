@@ -92,9 +92,10 @@ class WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
         // intentionally empty
     }
 
-    then(firstOutcome: AnyEvent): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+    then(firstOutcome: AnyEvent, ...additionalOutcomes: AnyEvent[]): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
         const outcomes = [
-            firstOutcome
+            firstOutcome,
+            ...additionalOutcomes
         ];
 
         return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(
