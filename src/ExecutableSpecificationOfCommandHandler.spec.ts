@@ -412,7 +412,7 @@ describe("Executable specification of command handler", () => {
     });
 
     test("Common specification: Given(1+N) -> When -> Then(1+N)", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved;
+        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
         type AnyTicketingCommand = | OfferTickets | ReserveTickets;
 
         const ticketsWereOffered: TicketsWereOffered = {
