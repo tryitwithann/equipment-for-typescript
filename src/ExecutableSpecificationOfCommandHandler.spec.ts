@@ -323,7 +323,6 @@ describe("Executable specification of command handler", () => {
             reservedNumberOfTickets: 2,
         };
 
-        const preConditions = [ticketsWereOffered];
         const trigger = reserveTickets;
         const outcomes = [ticketsWereReserved];
 
@@ -332,7 +331,7 @@ describe("Executable specification of command handler", () => {
             .when(reserveTickets)
             .then(ticketsWereReserved)
             .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
-                const expectedGivens = preConditions;
+                const expectedGivens = [ticketsWereOffered];
                 const expectedWhen = trigger;
                 const expectedThens = outcomes;
 
