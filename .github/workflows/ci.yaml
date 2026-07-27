@@ -19,7 +19,7 @@ jobs:
         run: 'bin/install.sh'
 
       - name: 'Configure GitHub Actions problem matcher for TSC compilation errors'
-        run: 'echo "::add-matcher::.github/tsc.json"'
+        run: 'echo "::add-matcher::${GITHUB_WORKSPACE}/.github/tsc.json"'
 
       - name: 'Compile'
         run: 'tsc --noEmit'
