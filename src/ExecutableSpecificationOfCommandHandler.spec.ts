@@ -323,8 +323,7 @@ describe("Executable specification of command handler", () => {
             reservedNumberOfTickets: 2,
         };
 
-        const preCondition = ticketsWereOffered;
-        const preConditions = [preCondition];
+        const preConditions = [ticketsWereOffered];
         const trigger = reserveTickets;
         const outcome = ticketsWereReserved;
 
