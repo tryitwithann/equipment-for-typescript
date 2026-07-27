@@ -18,6 +18,9 @@ jobs:
       - name: 'Install'
         run: 'bin/install.sh'
 
+      - name: 'Compile'
+        run: 'tsc --noEmit'
+
       - name: 'Test'
         run: 'bin/test.sh'
 
