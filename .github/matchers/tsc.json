@@ -1,5 +1,4 @@
 {
-  "problemMatcher": "Taken from: https://github.com/actions/setup-node/blob/main/.github/tsc.json",
   "problemMatcher": [
     {
       "owner": "tsc",
