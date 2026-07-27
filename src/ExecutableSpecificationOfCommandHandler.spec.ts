@@ -47,6 +47,39 @@ type TicketsWereOffered = {
     offeredAt: [string, string]
 }
 
+type ExecuteScenario<AnyEvent, AnyCommand> = (givens: AnyEvent[], when: AnyCommand, thens: AnyEvent[]) => Promise<void>;
+
+class ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+    constructor(
+        private trigger: AnyCommand,
+        private outcome: AnyEvent
+    ) {
+        // intentionally empty
+    }
+
+    async execute(executable: ExecuteScenario<AnyEvent, AnyCommand>) {
+        return executable([] as const, this.trigger, [this.outcome]);
+    }
+}
+
+class WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+    constructor(
+        private trigger: AnyCommand
+    ) {
+        // intentionally empty
+    }
+
+    then(outcome: AnyEvent): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.trigger, outcome)
+    }
+}
+
+class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+    when(trigger: AnyCommand): WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+        return new WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(trigger)
+    }
+}
+
 describe("Executable specification of command handler", () => {
     test("Simplest specification: When -> Then", async () => {
         type AnyTicketingEvent = | TicketsWereOffered;
@@ -102,7 +135,7 @@ describe("Executable specification of command handler", () => {
         return (new ExecutableSpecificationOfCommandHandler<AnyTicketingEvent, AnyTicketingCommand>())
             .when(trigger)
             .then(outcome)
-            .execute((givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
+            .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
                 const expectedGivens = [] as const;
                 const expectedWhen = trigger;
                 const expectedThens = [outcome];
