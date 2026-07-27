@@ -156,8 +156,8 @@ class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
 
 describe("Executable specification of command handler", () => {
     test("Simplest specification: When -> Then", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered;
-        type AnyTicketingCommand = | OfferTickets;
+        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
+        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
 
         const trigger: OfferTickets = {
             _named: "Offer tickets!",
@@ -221,8 +221,8 @@ describe("Executable specification of command handler", () => {
     })
 
     test("Common specification: Given(1) -> When -> Then(0)", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered;
-        type AnyTicketingCommand = | OfferTickets;
+        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
+        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
 
         const preCondition: TicketsWereOffered = {
             _named: "Tickets were offered",
@@ -287,7 +287,7 @@ describe("Executable specification of command handler", () => {
     });
 
     test("Common specification: Given(1) -> When -> Then(1)", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved;
+        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
         type AnyTicketingCommand = | OfferTickets | ReserveTickets;
 
         const ticketsWereOffered: TicketsWereOffered = {
