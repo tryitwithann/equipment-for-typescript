@@ -1,3 +1,4 @@
 # TODO: Investigate if bundling the node_modules in git is possible with our set-up to prevent left-pad like issues
 /node_modules
 /coverage
+/dist
