@@ -1,3 +1,12 @@
+/**
+ * A function to execute the scenario in some way.
+ *
+ * Examples:
+ *
+ *  - Run an automated test
+ *  - Visualize as an image
+ *  - Close feedback loop with other design tools
+ */
 export type ExecuteScenario<AnyEvent, AnyCommand> = (givens: AnyEvent[], when: AnyCommand, thens: AnyEvent[]) => Promise<void>;
 
 class ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
@@ -22,6 +31,11 @@ export class WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyComm
         // intentionally empty
     }
 
+    /**
+     * Provide at least one outcome, or optionally more than one.
+     *
+     * For specifications that do not expect anything refer to {@link thenNothingShouldHaveHappened}
+     */
     then(
         firstOutcome: AnyEvent,
         ...additionalOutcomes: AnyEvent[]
@@ -62,6 +76,12 @@ class GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
 }
 
 export class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+
+    /**
+     * Provide at least one precondition, or optionally more than one.
+     *
+     * For specifications that do not require any preconditions refer to {@link when}
+     */
     given(
         firstPreCondition: AnyEvent,
         ...additionalPreConditions: AnyEvent[]
