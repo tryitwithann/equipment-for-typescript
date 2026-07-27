@@ -72,7 +72,11 @@ class WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     }
 
     then(outcome: AnyEvent): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, [outcome])
+        const outcomes = [
+            outcome
+        ];
+
+        return new ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, this.trigger, outcomes)
     }
 
     thenNothingShouldHaveHappened(): ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
