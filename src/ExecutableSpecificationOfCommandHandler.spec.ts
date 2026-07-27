@@ -211,11 +211,11 @@ describe("Executable specification of command handler", () => {
             .then(ticketsWereOffered)
             .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
                 const expectedPreConditions = [] as const;
-                const expectedWhen = offerTickets;
+                const expectedTrigger = offerTickets;
                 const expectedThens = [ticketsWereOffered];
                 
                 expect(givens).toStrictEqual(expectedPreConditions);
-                expect(when).toStrictEqual(expectedWhen);
+                expect(when).toStrictEqual(expectedTrigger);
                 expect(thens).toStrictEqual(expectedThens);
             });
     })
