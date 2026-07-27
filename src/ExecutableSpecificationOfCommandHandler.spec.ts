@@ -102,7 +102,11 @@ describe("Executable specification of command handler", () => {
         return (new ExecutableSpecificationOfCommandHandler<AnyTicketingEvent, AnyTicketingCommand>())
             .when(trigger)
             .then(outcome)
-            .execute((givens: AnyTicketingEvent, when: AnyTicketingCommand, thens: AnyTicketingEvent) => {
+            .execute((givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
+                const expectedGivens = [] as const;
+                const expectedWhen = trigger;
+                const expectedThens = [outcome];
+                
                 expect(givens).toBe(expectedGivens);
                 expect(when).toBe(expectedWhen);
                 expect(thens).toBe(expectedThens);
