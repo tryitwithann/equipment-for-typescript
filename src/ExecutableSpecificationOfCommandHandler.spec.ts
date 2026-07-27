@@ -62,6 +62,12 @@ type TicketsWereReserved = {
     reservedNumberOfTickets: number
 }
 
+type LastTicketsWereReserved = {
+    _named: "Last tickets were reserved",
+    ticketSaleId: `ticket-sale:${string}`,
+    totalNumberOfReservedTickets: number,
+}
+
 type ExecuteScenario<AnyEvent, AnyCommand> = (givens: AnyEvent[], when: AnyCommand, thens: AnyEvent[]) => Promise<void>;
 
 class ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
@@ -336,7 +342,7 @@ describe("Executable specification of command handler", () => {
     });
 
     test("Common specification: Given(1+N) -> When -> Then(1)", async () => {
-        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved;
+        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved | LastTicketsWereReserved;
         type AnyTicketingCommand = | OfferTickets | ReserveTickets;
 
         const ticketsWereOffered: TicketsWereOffered = {
@@ -398,6 +404,90 @@ describe("Executable specification of command handler", () => {
                 const expectedGivens = preConditions;
                 const expectedWhen = trigger;
                 const expectedThens = [outcome];
+
+                expect(givens).toStrictEqual(expectedGivens);
+                expect(when).toStrictEqual(expectedWhen);
+                expect(thens).toStrictEqual(expectedThens);
+            });
+    });
+
+    test("Common specification: Given(1+N) -> When -> Then(1+N)", async () => {
+        type AnyTicketingEvent = | TicketsWereOffered | TicketsWereReserved;
+        type AnyTicketingCommand = | OfferTickets | ReserveTickets;
+
+        const ticketsWereOffered: TicketsWereOffered = {
+            _named: "Tickets were offered",
+            ticketSaleId: "ticket-sale:0e382d88-6112-4fd0-9c21-7a5a432c7e35",
+            ticketSellerId: "ticket-seller:9b079b1c-81b2-4acd-a1b6-75a10c08c595",
+            eventDetails: {
+                show: "Comedytrain Chefs Diner",
+                scheduled: ["2026-06-28 18:30", "2026-06-28 22:00", "Europe/Amsterdam"],
+                location: {
+                    venue: "Comedyclub Comedytrain",
+                    address: {
+                        street: "Pazzanistraat",
+                        streetNumber: "1",
+                        streetNumberAddition: "",
+                        postalCode: "1014 DB",
+                        city: "Amsterdam",
+                        country: "NL"
+                    }
+                }
+            },
+            availableTickets: 15,
+            priceInCents: [18250, "EUR"],
+            offeredAt: ["2026-04-20 15:12:49", "Europe/Amsterdam"]
+        };
+
+        const firstTicketsWereReserved: TicketsWereReserved = {
+            _named: "Tickets were reserved",
+            ticketSaleId: "ticket-sale:0e382d88-6112-4fd0-9c21-7a5a432c7e35",
+            basket: "basket:11111111-1111-1111-1111-111111111111",
+            desiredNumberOfTickets: 6,
+            reservedNumberOfTickets: 6,
+        };
+
+        const someTicketsWereReserved: TicketsWereReserved = {
+            _named: "Tickets were reserved",
+            ticketSaleId: "ticket-sale:0e382d88-6112-4fd0-9c21-7a5a432c7e35",
+            basket: "basket:22222222-2222-2222-2222-222222222222",
+            desiredNumberOfTickets: 6,
+            reservedNumberOfTickets: 6,
+        };
+
+        const reserveTickets: ReserveTickets = {
+            _named: "Reserve tickets!",
+            ticketSaleId: "ticket-sale:0e382d88-6112-4fd0-9c21-7a5a432c7e35",
+            basket: "basket:33333333-3333-3333-3333-333333333333",
+            desiredNumberOfTickets: 3,
+        };
+
+        const moreTicketsWereReserved: TicketsWereReserved = {
+            _named: "Tickets were reserved",
+            ticketSaleId: "ticket-sale:0e382d88-6112-4fd0-9c21-7a5a432c7e35",
+            basket: "basket:33333333-3333-3333-3333-333333333333",
+            desiredNumberOfTickets: 3,
+            reservedNumberOfTickets: 3,
+        };
+
+        const lastTicketsWereReserved: LastTicketsWereReserved = {
+            _named: "Last tickets were reserved",
+            ticketSaleId: "ticket-sale:0e382d88-6112-4fd0-9c21-7a5a432c7e35",
+            totalNumberOfReservedTickets: 15,
+        };
+
+        const preConditions = [ticketsWereOffered, firstTicketsWereReserved, someTicketsWereReserved];
+        const trigger = reserveTickets;
+        const outcome = [moreTicketsWereReserved, lastTicketsWereReserved];
+
+        return (new ExecutableSpecificationOfCommandHandler<AnyTicketingEvent, AnyTicketingCommand>())
+            .given(ticketsWereOffered, firstTicketsWereReserved, someTicketsWereReserved)
+            .when(trigger)
+            .then(moreTicketsWereReserved, lastTicketsWereReserved)
+            .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
+                const expectedGivens = preConditions;
+                const expectedWhen = trigger;
+                const expectedThens = outcome;
 
                 expect(givens).toStrictEqual(expectedGivens);
                 expect(when).toStrictEqual(expectedWhen);
