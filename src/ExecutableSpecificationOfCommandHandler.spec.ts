@@ -102,7 +102,7 @@ class GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     }
 
     when(trigger: AnyCommand): WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-        return new WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, trigger)
+        return new WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(this.preConditions, trigger);
     }
 }
 
@@ -112,7 +112,7 @@ class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
             firstPreCondition
         ];
 
-        return new GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(preConditions)
+        return new GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(preConditions);
     }
 
     when(trigger: AnyCommand): WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
@@ -255,5 +255,5 @@ describe("Executable specification of command handler", () => {
                 expect(when).toStrictEqual(expectedWhen);
                 expect(thens).toStrictEqual(expectedThens);
             });
-    })
+    });
 });
