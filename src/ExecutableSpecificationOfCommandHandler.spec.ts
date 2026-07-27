@@ -107,9 +107,9 @@ class GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
 }
 
 class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-    given(preCondition: AnyEvent): GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+    given(firstPreCondition: AnyEvent): GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
         const preConditions = [
-            preCondition
+            firstPreCondition
         ];
 
         return new GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(preConditions)
