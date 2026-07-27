@@ -145,4 +145,70 @@ describe("Executable specification of command handler", () => {
                 expect(thens).toStrictEqual(expectedThens);
             });
     })
+
+    test("Common specification: Given(1) -> When -> Then(0)", async () => {
+        type AnyTicketingEvent = | TicketsWereOffered;
+        type AnyTicketingCommand = | OfferTickets;
+
+        const preCondition: TicketsWereOffered = {
+            _named: "Tickets were offered",
+            ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
+            ticketSellerId: "ticket-seller:9b079b1c-81b2-4acd-a1b6-75a10c08c595",
+            eventDetails: {
+                show: "Comedytrain",
+                scheduled: ["2026-06-20 20:30", "2026-06-20 22:00", "Europe/Amsterdam"],
+                location: {
+                    venue: "Comedyclub Comedytrain",
+                    address: {
+                        street: "Pazzanistraat",
+                        streetNumber: "1",
+                        streetNumberAddition: "",
+                        postalCode: "1014 DB",
+                        city: "Amsterdam",
+                        country: "NL"
+                    }
+                }
+            },
+            availableTickets: 150,
+            priceInCents: [2250, "EUR"],
+            offeredAt: ["2026-05-04 09:07:15", "Europe/Amsterdam"]
+        };
+
+        const trigger: OfferTickets = {
+            _named: "Offer tickets!",
+            ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
+            ticketSellerId: "ticket-seller:9b079b1c-81b2-4acd-a1b6-75a10c08c595",
+            eventDetails: {
+                show: "Comedytrain",
+                scheduled: ["2026-06-20 20:30", "2026-06-20 22:00", "Europe/Amsterdam"],
+                location: {
+                    venue: "Comedyclub Comedytrain",
+                    address: {
+                        street: "Pazzanistraat",
+                        streetNumber: "1",
+                        streetNumberAddition: "",
+                        postalCode: "1014 DB",
+                        city: "Amsterdam",
+                        country: "NL"
+                    }
+                }
+            },
+            availableTickets: 150,
+            priceInCents: [2250, "EUR"]
+        };
+
+        return (new ExecutableSpecificationOfCommandHandler<AnyTicketingEvent, AnyTicketingCommand>())
+            .given(preCondition)
+            .when(trigger)
+            .thenNothingShouldHaveHappened()
+            .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
+                const expectedGivens = [] as const;
+                const expectedWhen = trigger;
+                const expectedThens = [outcome];
+
+                expect(givens).toStrictEqual(expectedGivens);
+                expect(when).toStrictEqual(expectedWhen);
+                expect(thens).toStrictEqual(expectedThens);
+            });
+    })
 });
