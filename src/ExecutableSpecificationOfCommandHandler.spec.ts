@@ -132,7 +132,10 @@ class GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
 }
 
 class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-    given(firstPreCondition: AnyEvent, ...additionalPreConditions: AnyEvent[]): GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
+    given(
+        firstPreCondition: AnyEvent,
+        ...additionalPreConditions: AnyEvent[]
+    ): GivenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
         const preConditions = [
             firstPreCondition,
             ...additionalPreConditions
