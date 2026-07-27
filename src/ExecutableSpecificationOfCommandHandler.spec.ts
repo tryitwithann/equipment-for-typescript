@@ -107,9 +107,9 @@ describe("Executable specification of command handler", () => {
                 const expectedWhen = trigger;
                 const expectedThens = [outcome];
                 
-                expect(givens).toBe(expectedGivens);
-                expect(when).toBe(expectedWhen);
-                expect(thens).toBe(expectedThens);
+                expect(givens).toStrictEqual(expectedGivens);
+                expect(when).toStrictEqual(expectedWhen);
+                expect(thens).toStrictEqual(expectedThens);
             });
     })
 });
