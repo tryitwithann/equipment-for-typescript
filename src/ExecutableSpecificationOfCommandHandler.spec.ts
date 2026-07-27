@@ -59,7 +59,9 @@ class ThenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     }
 
     async execute(executable: ExecuteScenario<AnyEvent, AnyCommand>) {
-        return executable(this.preConditions, this.trigger, this.outcome ? [this.outcome] : []);
+        const outcomes = this.outcome ? [this.outcome] : [];
+
+        return executable(this.preConditions, this.trigger, outcomes);
     }
 }
 
