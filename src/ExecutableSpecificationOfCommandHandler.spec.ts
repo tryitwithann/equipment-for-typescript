@@ -116,7 +116,9 @@ class ExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
     }
 
     when(trigger: AnyCommand): WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand> {
-        return new WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>([] as const, trigger)
+        const noPreConditionsExpected: AnyEvent[] = [] as const;
+
+        return new WhenStepOfExecutableSpecificationOfCommandHandler<AnyEvent, AnyCommand>(noPreConditionsExpected, trigger)
     }
 }
 
