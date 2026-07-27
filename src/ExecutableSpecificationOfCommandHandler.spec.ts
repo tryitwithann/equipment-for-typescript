@@ -467,12 +467,12 @@ describe("Executable specification of command handler", () => {
             .given(ticketsWereOffered, firstTicketsWereReserved, someTicketsWereReserved)
             .when(reserveTickets)
             .then(moreTicketsWereReserved, lastTicketsWereReserved)
-            .execute(async (givens: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
+            .execute(async (preConditions: AnyTicketingEvent[], when: AnyTicketingCommand, thens: AnyTicketingEvent[]) => {
                 const expectedGivens = [ticketsWereOffered, firstTicketsWereReserved, someTicketsWereReserved];
                 const expectedWhen = reserveTickets;
                 const expectedThens = [moreTicketsWereReserved, lastTicketsWereReserved];
 
-                expect(givens).toStrictEqual(expectedGivens);
+                expect(preConditions).toStrictEqual(expectedGivens);
                 expect(when).toStrictEqual(expectedWhen);
                 expect(thens).toStrictEqual(expectedThens);
             });
