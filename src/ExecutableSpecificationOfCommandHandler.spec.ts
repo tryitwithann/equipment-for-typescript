@@ -1,0 +1,111 @@
+import {describe, expect, test} from "vitest";
+
+type OfferTickets = {
+    _named: "Offer tickets!",
+    ticketSaleId: `ticket-sale:${string}`,
+    ticketSellerId: `ticket-seller:${string}`,
+    eventDetails: {
+        show: string,
+        scheduled: [string, string, string]
+        location: {
+            venue: string
+            address: {
+                street: string,
+                streetNumber: string,
+                streetNumberAddition: string,
+                postalCode: string,
+                city: string,
+                country: string
+            }
+        }
+    },
+    availableTickets: number,
+    priceInCents: [number, "EUR" | "GBP"]
+}
+
+type TicketsWereOffered = {
+    _named: "Tickets were offered",
+    ticketSaleId: `ticket-sale:${string}`,
+    ticketSellerId: `ticket-seller:${string}`,
+    eventDetails: {
+        show: string,
+        scheduled: [string, string, string]
+        location: {
+            venue: string
+            address: {
+                street: string,
+                streetNumber: string,
+                streetNumberAddition: string,
+                postalCode: string,
+                city: string,
+                country: string
+            }
+        }
+    },
+    availableTickets: number,
+    priceInCents: [number, "EUR" | "GBP"],
+    offeredAt: [string, string]
+}
+
+describe("Executable specification of command handler", () => {
+    test("Simplest specification: When -> Then", async () => {
+        type AnyTicketingEvent = | TicketsWereOffered;
+        type AnyTicketingCommand = | OfferTickets;
+
+        const trigger: OfferTickets = {
+            _named: "Offer tickets!",
+            ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
+            ticketSellerId: "ticket-seller:9b079b1c-81b2-4acd-a1b6-75a10c08c595",
+            eventDetails: {
+                show: "Comedytrain",
+                scheduled: ["2026-06-20 20:30", "2026-06-20 22:00", "Europe/Amsterdam"],
+                location: {
+                    venue: "Comedyclub Comedytrain",
+                    address: {
+                        street: "Pazzanistraat",
+                        streetNumber: "1",
+                        streetNumberAddition: "",
+                        postalCode: "1014 DB",
+                        city: "Amsterdam",
+                        country: "NL"
+                    }
+                }
+            },
+            availableTickets: 150,
+            priceInCents: [2250, "EUR"]
+        };
+
+        const outcome: TicketsWereOffered = {
+            _named: "Tickets were offered",
+            ticketSaleId: "ticket-sale:63074afc-3c6d-451e-8eed-ccd2ce03e2c3",
+            ticketSellerId: "ticket-seller:9b079b1c-81b2-4acd-a1b6-75a10c08c595",
+            eventDetails: {
+                show: "Comedytrain",
+                scheduled: ["2026-06-20 20:30", "2026-06-20 22:00", "Europe/Amsterdam"],
+                location: {
+                    venue: "Comedyclub Comedytrain",
+                    address: {
+                        street: "Pazzanistraat",
+                        streetNumber: "1",
+                        streetNumberAddition: "",
+                        postalCode: "1014 DB",
+                        city: "Amsterdam",
+                        country: "NL"
+                    }
+                }
+            },
+            availableTickets: 150,
+            priceInCents: [2250, "EUR"],
+            offeredAt: ["2026-05-04 09:07:15", "Europe/Amsterdam"]
+        };
+
+        return (new ExecutableSpecificationOfCommandHandler<AnyTicketingEvent, AnyTicketingCommand>())
+            .when(trigger)
+            .then(outcome)
+            .execute((givens: AnyTicketingEvent, when: AnyTicketingCommand, thens: AnyTicketingEvent) => {
+                expect(givens).toBe(expectedGivens);
+                expect(when).toBe(expectedWhen);
+                expect(thens).toBe(expectedThens);
+            });
+    })
+});
