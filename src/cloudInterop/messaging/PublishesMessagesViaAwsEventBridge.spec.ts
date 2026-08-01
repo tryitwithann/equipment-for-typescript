@@ -2,7 +2,8 @@ import {describe, expect, test} from "vitest";
 import {EventBridgeClient} from "@aws-sdk/client-eventbridge";
 
 import {requireEnvVar} from "../../EnvironmentVariables";
-import {createPublishesMessagesViaAwsEventBridge, MessageMetadata} from "./PublishesMessagesViaAwsEventBridge";
+import {createPublishesMessagesViaAwsEventBridge} from "./PublishesMessagesViaAwsEventBridge";
+import {MessageMetadata} from "./PublishesMessages";
 
 type TicketsWereSold = {
     _named: "Tickets were sold",
