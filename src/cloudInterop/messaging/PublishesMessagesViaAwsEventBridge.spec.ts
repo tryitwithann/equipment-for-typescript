@@ -35,9 +35,9 @@ type TicketsWereSold = {
     soldAt: number
 };
 
-const createPublishesMessagesViaAwsEventBridge: (
+const createPublishesMessagesViaAwsEventBridge: <MessagePayload extends { _named: string } = { _named: string }>(
     client: EventBridgeClient
-) => PublishesMessages<TicketsWereSold> = (client) => {
+) => PublishesMessages<MessagePayload> = (client) => {
     return async (messages) => {
         const eventsToPublish: PutEventsCommandInput = {
             Entries: messages.map((message) => {
@@ -69,7 +69,7 @@ const createPublishesMessagesViaAwsEventBridge: (
 }
 
 describe("Publishes messages via AWS EventBridge", () => {
-    const publishesMessagesViaAwsEventBridge = createPublishesMessagesViaAwsEventBridge(
+    const publishesMessagesViaAwsEventBridge = createPublishesMessagesViaAwsEventBridge<TicketsWereSold>(
         new EventBridgeClient({ region: requireEnvVar("AWS_REGION") })
     );
 
