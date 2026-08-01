@@ -28,7 +28,7 @@ describe("Require environment variable", () => {
 
     test("Returns value as text when ENV var exists", () => {
         process.env['X_FAVORITE_PRODUCT'] = 'ANN';
-        const expected = 'paloma';
+        const expected = 'ANN';
 
         expect(requireEnvVar("X_FAVORITE_PRODUCT")).toBe(expected);
     });
