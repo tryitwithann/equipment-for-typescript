@@ -1,7 +1,8 @@
 import {describe, expect, test} from "vitest";
-import { EventBridgeClient } from "@aws-sdk/client-eventbridge";
+import {EventBridgeClient, PutEventsCommand} from "@aws-sdk/client-eventbridge";
 
 import {requireEnvVar} from "../../EnvironmentVariables";
+import {PutEventsCommandInput} from "@aws-sdk/client-eventbridge/dist-types/commands/PutEventsCommand";
 
 export type MessageId = `message:${string}`;
 export type ExternalId = `external:${string}`;
@@ -36,9 +37,34 @@ type TicketsWereSold = {
 
 const createPublishesMessagesViaAwsEventBridge: (
     client: EventBridgeClient
-) => PublishesMessages<TicketsWereSold> = () => {
+) => PublishesMessages<TicketsWereSold> = (client) => {
     return async (messages) => {
-        throw new Error("TODO: Implement me");
+        const eventsToPublish: PutEventsCommandInput = {
+            Entries: messages.map((message) => {
+                return {
+                    Detail: JSON.stringify(message),
+                    DetailType: message.payload._named,
+                    Source: 'ann'
+                }
+            }),
+        };
+
+        return client.send(new PutEventsCommand(eventsToPublish))
+            .then((data) => {
+                console.log(JSON.stringify(data, null, 2));
+
+                return {
+                    publishedMessages: messages.map((message) => message.metadata["Message-Id"])
+                };
+            })
+            .catch((reason) => {
+                // TODO: Model PublishStatus better to include potential errors
+                console.log(reason);
+
+                return {
+                    publishedMessages: []
+                };
+            });
     }
 }
 
