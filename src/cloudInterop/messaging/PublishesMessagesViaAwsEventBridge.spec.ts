@@ -1,0 +1,75 @@
+import {describe, expect, test} from "vitest";
+import { EventBridgeClient } from "@aws-sdk/client-eventbridge";
+
+import {requireEnvVar} from "../../EnvironmentVariables";
+
+export type MessageId = `message:${string}`;
+export type ExternalId = `external:${string}`;
+export type AnyMessageId = | MessageId | ExternalId
+
+export type PublishStatus = {
+    publishedMessages: MessageId[]
+}
+
+export type MessageMetadata = {
+    ['Message-Id']: MessageId,
+    ['Correlation-Id']: AnyMessageId,
+    ['Causation-Id']: AnyMessageId
+}
+
+export type PublishesMessages<
+    MessagePayload extends { _named: string } = { _named: string },
+    Message extends { payload: MessagePayload, metadata: MessageMetadata } = {
+        payload: MessagePayload,
+        metadata: MessageMetadata
+    },
+> = (messages: Message[]) => Promise<PublishStatus>
+
+type TicketsWereSold = {
+    _named: "Tickets were sold",
+    ticketSaleId: `ticket-sale:${string}`,
+    ticketSellerId: `ticket-seller:${string}`,
+    ticketBuyerId: `ticket-buyer:${string}`,
+    quantity: number,
+    soldAt: number
+};
+
+const createPublishesMessagesViaAwsEventBridge: (
+    client: EventBridgeClient
+) => PublishesMessages<TicketsWereSold> = () => {
+    return async (messages) => {
+        throw new Error("TODO: Implement me");
+    }
+}
+
+describe("Publishes messages via AWS EventBridge", () => {
+    const publishesMessagesViaAwsEventBridge = createPublishesMessagesViaAwsEventBridge(
+        new EventBridgeClient({ region: requireEnvVar("AWS_REGION") })
+    );
+
+    test("Successfully publishes messages", async () => {
+        const example: {
+            payload: TicketsWereSold,
+            metadata: MessageMetadata
+        } = {
+            payload: {
+                _named: "Tickets were sold",
+                ticketSaleId:     "ticket-sale:11111111-1111-1111-1111-111111111111",
+                ticketSellerId: "ticket-seller:AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA",
+                ticketBuyerId:   "ticket-buyer:BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB",
+                quantity: 5,
+                soldAt: 1785412927
+            },
+            metadata: {
+                ['Message-Id']:     "message:99999999-9999-9999-9999-999999999999",
+                ['Causation-Id']:   "message:88888888-8888-8888-8888-888888888888",
+                ['Correlation-Id']: "message:77777777-7777-7777-7777-777777777777"
+            }
+        };
+
+        const publishedMessages = await publishesMessagesViaAwsEventBridge([example]);
+
+        expect(publishedMessages.publishedMessages.length).toBeGreaterThan(0);
+        expect(publishedMessages.publishedMessages).toStrictEqual(["message:99999999-9999-9999-9999-999999999999"])
+    });
+});
