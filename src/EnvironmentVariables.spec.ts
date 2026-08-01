@@ -15,7 +15,7 @@ export const requireEnvVar = (key: AnyEnvVar): string => {
         throw new Error(`Failed to load environment variable named: "${key}"`);
     }
 
-    throw new Error("TODO: Implement me");
+    return process.env[key];
 };
 
 
