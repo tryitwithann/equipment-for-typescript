@@ -13,12 +13,15 @@
   "license": "CC-BY-SA-4.0",
   "author": "Try it with Ann",
   "scripts": {
-    "test": "some people are used to `npm run test` so let's make life easy for them.",
     "test": "bin/test.sh"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.10",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "@types/node": "^26.1.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-eventbridge": "^3.1101.0"
   }
 }
