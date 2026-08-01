@@ -11,6 +11,10 @@ const AllEnvVars = [
 type AnyEnvVar = typeof AllEnvVars[number];
 
 export const requireEnvVar = (key: AnyEnvVar): string => {
+    if (!(key in process.env) || undefined === process.env[key]) {
+        throw new Error(`Failed to load environment variable named: "${key}"`);
+    }
+
     throw new Error("TODO: Implement me");
 };
 
