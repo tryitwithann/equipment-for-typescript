@@ -2,7 +2,7 @@ import {describe, expect, test} from "vitest";
 import {EventBridgeClient} from "@aws-sdk/client-eventbridge";
 
 import {requireEnvVar} from "../../EnvironmentVariables";
-import {createPublishesMessagesViaAwsEventBridge} from "./PublishesMessagesViaAwsEventBridge";
+import {createPublishesMessagesViaAwsEventBridge, EventBusArn} from "./PublishesMessagesViaAwsEventBridge";
 import {MessageMetadata} from "./PublishesMessages";
 
 type TicketsWereSold = {
@@ -14,9 +14,20 @@ type TicketsWereSold = {
     soldAt: number
 };
 
+const isEventBusArn = (
+    candidate: string
+): candidate is EventBusArn => /arn:aws:events:([^:]+):([^:]+):event-bus\/([^$]+)/.test(candidate);
+
 describe("Publishes messages via AWS EventBridge", () => {
+    const eventBus = requireEnvVar("ANN_AWS_EVENT_BUS_NAME");
+
+    if (!isEventBusArn(eventBus)) {
+        throw new Error("EventBus ARN did not match expected format (`arn:aws:events:*:*:event-bus/*`)")
+    }
+
     const publishesMessagesViaAwsEventBridge = createPublishesMessagesViaAwsEventBridge<TicketsWereSold>(
-        new EventBridgeClient({ region: requireEnvVar("AWS_REGION") })
+        new EventBridgeClient({ region: requireEnvVar("AWS_REGION") }),
+        eventBus
     );
 
     test("Successfully publishes messages", async () => {
