@@ -19,7 +19,7 @@ const isEventBusArn = (
 ): candidate is EventBusArn => /arn:aws:events:([^:]+):([^:]+):event-bus\/([^$]+)/.test(candidate);
 
 describe("Publishes messages via AWS EventBridge", () => {
-    const eventBus = requireEnvVar("ANN_AWS_EVENT_BUS_NAME");
+    const eventBus = requireEnvVar("ANN_AWS_EVENT_BUS_ARN");
 
     if (!isEventBusArn(eventBus)) {
         throw new Error("EventBus ARN did not match expected format (`arn:aws:events:*:*:event-bus/*`)")

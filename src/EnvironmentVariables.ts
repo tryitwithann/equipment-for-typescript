@@ -2,7 +2,7 @@ const AllEnvVars = [
     "AWS_REGION",
     "AWS_ACCESS_KEY_ID",
     "AWS_SECRET_ACCESS_KEY",
-    "ANN_AWS_EVENT_BUS_NAME",
+    "ANN_AWS_EVENT_BUS_ARN",
     // ⬆️Actual environment variables
     // ⬇️Example for testing purposes
     "X_FAVORITE_PRODUCT",
