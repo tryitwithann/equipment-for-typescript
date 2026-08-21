@@ -3,7 +3,7 @@ export type ExternalId = `external:${string}`;
 export type AnyMessageId = | MessageId | ExternalId
 
 export type PublishStatus = {
-    publishedMessages: MessageId[]
+    publishedMessages: AnyMessageId[]
 }
 
 export type MessageMetadata = {
