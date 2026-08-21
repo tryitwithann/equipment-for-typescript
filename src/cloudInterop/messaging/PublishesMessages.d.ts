@@ -7,7 +7,7 @@ export type PublishStatus = {
 }
 
 export type MessageMetadata = {
-    ['Message-Id']: MessageId,
+    ['Message-Id']: AnyMessageId,
     ['Correlation-Id']: AnyMessageId,
     ['Causation-Id']: AnyMessageId
 }
