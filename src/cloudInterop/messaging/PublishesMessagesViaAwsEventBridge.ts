@@ -38,3 +38,7 @@ export const createPublishesMessagesViaAwsEventBridge: <MessagePayload extends {
             });
     }
 }
+
+export const isEventBusArn = (
+    candidate: string
+): candidate is EventBusArn => /arn:aws:events:([^:]+):([^:]+):event-bus\/([^$]+)/.test(candidate);

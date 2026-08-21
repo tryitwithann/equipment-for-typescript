@@ -2,7 +2,7 @@ import {describe, expect, test} from "vitest";
 import {EventBridgeClient} from "@aws-sdk/client-eventbridge";
 
 import {requireEnvVar} from "../../EnvironmentVariables";
-import {createPublishesMessagesViaAwsEventBridge, EventBusArn} from "./PublishesMessagesViaAwsEventBridge";
+import {createPublishesMessagesViaAwsEventBridge, isEventBusArn} from "./PublishesMessagesViaAwsEventBridge";
 import {MessageMetadata} from "./PublishesMessages";
 
 type TicketsWereSold = {
@@ -13,10 +13,6 @@ type TicketsWereSold = {
     quantity: number,
     soldAt: number
 };
-
-const isEventBusArn = (
-    candidate: string
-): candidate is EventBusArn => /arn:aws:events:([^:]+):([^:]+):event-bus\/([^$]+)/.test(candidate);
 
 describe("Publishes messages via AWS EventBridge", () => {
     const eventBus = requireEnvVar("ANN_AWS_EVENT_BUS_ARN");
